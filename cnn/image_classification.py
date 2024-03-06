@@ -94,7 +94,7 @@ print('Finished Training')
 # Evaluate the model.
 correct = 0
 total = 0
-``
+
 with torch.no_grad():
     for data in test_loader:
         images, labels = data
