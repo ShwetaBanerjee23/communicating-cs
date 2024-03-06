@@ -87,7 +87,29 @@ criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 
 # Train the model.
-#### TODO ####
+for epoch in range(2):  # Loop over the dataset multiple times.
+    running_loss = 0.0
+    
+    for i, data in enumerate(train_loader, 0):
+        # Get the inputs; data is a list of [inputs, labels].
+        inputs, labels = data
+
+        # Zero the parameter gradients.
+        optimizer.zero_grad()
+
+        # Forward + backward + optimize.
+        outputs = model(inputs)
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()
+
+        # Print statistics.
+        running_loss += loss.item()
+        if i % 2000 == 1999:  # Print every 2000 mini-batches.
+            print('[%d, %5d] loss: %.3f' % (epoch + 1, 
+                                            i + 1, 
+                                            running_loss / 2000))
+            running_loss = 0.0
 
 print('Finished Training')
 
@@ -95,13 +117,19 @@ print('Finished Training')
 correct = 0
 total = 0
 
-with torch.no_grad():
-    for data in test_loader:
-        images, labels = data
-        outputs = model(images)
-        _, predicted = torch.max(outputs.data, 1)
-        total += labels.size(0)
-        correct += (predicted == labels).sum().item()
+#### TODO ####
+"""
+Task: Implement model evaluation on the test dataset.
+
+Steps to Implement:
+1. Iterate over the test_loader.
+2. Extract images and labels from each batch.
+3. Pass images through the trained model to get outputs.
+4. Get predicted labels using torch.max.
+5. Compare predicted labels with ground truth labels.
+6. Calculate the number of correct predictions and update the total.
+7. Compute the accuracy using correct predictions and total images.
+"""
 
 print('Accuracy of the network on the 10000 test images: %d %%' % 
       (100 * correct / total))
